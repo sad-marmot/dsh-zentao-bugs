@@ -28,6 +28,12 @@ window.__ModuleLoader__.load({
       3: { label: 'S3', color: '#2563eb' },
       4: { label: 'S4', color: '#6b7280' },
     };
+    const PRI = {
+      1: { label: 'P1', color: '#dc2626' },
+      2: { label: 'P2', color: '#ea580c' },
+      3: { label: 'P3', color: '#2563eb' },
+      4: { label: 'P4', color: '#6b7280' },
+    };
     const STATUS = {
       active: { label: '激活', color: '#dc2626' },
       resolved: { label: '已解决', color: '#16a34a' },
@@ -163,6 +169,7 @@ window.__ModuleLoader__.load({
             h('thead', null, h('tr', null,
               h('th', { style: { ...th, position: 'sticky', top: 0, background: 'var(--dsw-alias-panel, var(--dsw-specific-panel, inherit))' } }, 'ID'),
               h('th', { style: { ...th, position: 'sticky', top: 0 } }, '严重程度'),
+              h('th', { style: { ...th, position: 'sticky', top: 0 } }, '优先级'),
               h('th', { style: { ...th, position: 'sticky', top: 0 } }, '状态'),
               h('th', { style: { ...th, width: '45%', position: 'sticky', top: 0 } }, '标题'),
               h('th', { style: { ...th, position: 'sticky', top: 0 } }, '产品'),
@@ -170,10 +177,12 @@ window.__ModuleLoader__.load({
             )),
             h('tbody', null, rows.map((b) => {
               const sev = SEVERITY[b.severity] || SEVERITY[4];
+              const pri = PRI[b.pri] || PRI[4];
               const st = STATUS[b.status] || { label: b.status, color: '#6b7280' };
               return h('tr', { key: b.id },
                 h('td', { style: { ...td, fontFamily: 'monospace', whiteSpace: 'nowrap' } }, '#' + b.id),
                 h('td', { style: td }, badge(sev.label, sev.color)),
+                h('td', { style: td }, badge(pri.label, pri.color)),
                 h('td', { style: td }, badge(st.label, st.color)),
                 h('td', { style: td },
                   h('a', {

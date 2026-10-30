@@ -1,6 +1,6 @@
 {
   "name": "dsh-zentao-bugs",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "DSH 插件：在左侧栏面板或右侧边栏查询禅道「我的地盘 → 指派给我」的 Bug，分页列表与详情（含历史记录、评论与步骤截图）。",
   "type": "module",
   "icon": "./icon.svg",
