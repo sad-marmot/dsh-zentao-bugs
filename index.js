@@ -196,8 +196,9 @@ export function apply(ctx, config) {
       return sendJson(res, 400, { error: '请先在「设置 → 禅道」中完整配置禅道地址、用户名和密码' });
     }
     if (pathname === '/zentao-plugin/bugs') {
+      const force = new URL(req.url, 'http://x').searchParams.get('refresh') === '1';
       const ck = credsKey();
-      if (bugsCache.payload && bugsCache.ck === ck && Date.now() - bugsCache.at < 30000) {
+      if (!force && bugsCache.payload && bugsCache.ck === ck && Date.now() - bugsCache.at < 30000) {
         return sendJson(res, 200, bugsCache.payload);
       }
       const first = await zenGet('/my-work-bug-assignedTo--id_desc-0-500-1.json');
@@ -293,7 +294,10 @@ export function apply(ctx, config) {
 
   function sendJson(res, code, body) {
     const text = JSON.stringify(body);
-    res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8' });
+    res.writeHead(code, {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'no-store',
+    });
     res.end(text);
   }
 }

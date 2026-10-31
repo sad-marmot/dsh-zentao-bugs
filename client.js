@@ -88,11 +88,11 @@ window.__ModuleLoader__.load({
       const [detail, setDetail] = useState(null);
       const [detailLoading, setDetailLoading] = useState(false);
 
-      const loadList = useCallback(async () => {
+      const loadList = useCallback(async (force) => {
         setError('');
         setList(null);
         try {
-          const res = await fetch('/zentao-plugin/bugs');
+          const res = await fetch('/zentao-plugin/bugs' + (force ? '?refresh=1' : ''));
           const body = await res.json();
           if (!res.ok) throw new Error(body.error || 'HTTP ' + res.status);
           setList(body);
@@ -115,7 +115,7 @@ window.__ModuleLoader__.load({
         credSnap && credSnap.value && credSnap.value.username,
         credSnap && credSnap.value && credSnap.value.password,
       ].map((v) => (v ? '1' : '0')).join('');
-      useEffect(() => { loadList(); }, [credKey, loadList]);
+      useEffect(() => { loadList(true); }, [credKey, loadList]);
 
       const openDetail = useCallback(async (id) => {
         setView('detail');
@@ -137,7 +137,7 @@ window.__ModuleLoader__.load({
       if (view === 'detail') {
         return h(DetailView, { detail, loading: detailLoading, error, onBack: () => setView('list') });
       }
-      return h(ListView, { list, error, page, setPage, pageSize, setPageSize, openDetail, onRefresh: loadList });
+      return h(ListView, { list, error, page, setPage, pageSize, setPageSize, openDetail, onRefresh: () => loadList(true) });
     }
 
     function ListView({ list, error, page, setPage, pageSize, setPageSize, openDetail, onRefresh }) {
